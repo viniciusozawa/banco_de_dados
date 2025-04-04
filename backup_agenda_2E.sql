@@ -1,0 +1,43 @@
+-- --------------------------------------------------------
+-- Servidor:                     127.0.0.1
+-- Versão do servidor:           10.4.10-MariaDB - mariadb.org binary distribution
+-- OS do Servidor:               Win64
+-- HeidiSQL Versão:              12.6.0.6765
+-- --------------------------------------------------------
+
+/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
+/*!40101 SET NAMES utf8 */;
+/*!50503 SET NAMES utf8mb4 */;
+/*!40103 SET @OLD_TIME_ZONE=@@TIME_ZONE */;
+/*!40103 SET TIME_ZONE='+00:00' */;
+/*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
+/*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
+/*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
+
+
+-- Copiando estrutura do banco de dados para agenda_2e_2025
+DROP DATABASE IF EXISTS `agenda_2e_2025`;
+CREATE DATABASE IF NOT EXISTS `agenda_2e_2025` /*!40100 DEFAULT CHARACTER SET utf8mb4 */;
+USE `agenda_2e_2025`;
+
+-- Copiando estrutura para tabela agenda_2e_2025.categoria
+DROP TABLE IF EXISTS `categoria`;
+CREATE TABLE IF NOT EXISTS `categoria` (
+  `codCategoria` int(11) NOT NULL AUTO_INCREMENT,
+  `nomeCategoria` varchar(150) NOT NULL,
+  PRIMARY KEY (`codCategoria`)
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4;
+
+-- Copiando dados para a tabela agenda_2e_2025.categoria: ~5 rows (aproximadamente)
+INSERT INTO `categoria` (`codCategoria`, `nomeCategoria`) VALUES
+	(1, 'Familiares'),
+	(2, 'Amigos'),
+	(3, 'Comerciais'),
+	(4, 'Colegas de Classe'),
+	(5, 'Emergência');
+
+/*!40103 SET TIME_ZONE=IFNULL(@OLD_TIME_ZONE, 'system') */;
+/*!40101 SET SQL_MODE=IFNULL(@OLD_SQL_MODE, '') */;
+/*!40014 SET FOREIGN_KEY_CHECKS=IFNULL(@OLD_FOREIGN_KEY_CHECKS, 1) */;
+/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
+/*!40111 SET SQL_NOTES=IFNULL(@OLD_SQL_NOTES, 1) */;
