@@ -27,9 +27,14 @@ CREATE TABLE IF NOT EXISTS `professores` (
   `nomeProfessor` varchar(300) NOT NULL,
   `formacaoProfessor` varchar(1000) DEFAULT NULL,
   PRIMARY KEY (`codProfessor`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- Copiando dados para a tabela aula2e.professores: ~0 rows (aproximadamente)
+INSERT INTO `professores` (`codProfessor`, `nomeProfessor`, `formacaoProfessor`) VALUES
+	(1, 'Cristina Almeida', 'Ciencia da computação'),
+	(2, 'João Roberto Caixeta', NULL),
+	(3, 'Paulize Ramos', 'Química'),
+	(4, 'Vlander Verdade', NULL);
 
 -- Copiando estrutura para tabela aula2e.professoresporturmas
 DROP TABLE IF EXISTS `professoresporturmas`;
