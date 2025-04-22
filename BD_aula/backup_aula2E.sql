@@ -27,14 +27,16 @@ CREATE TABLE IF NOT EXISTS `professores` (
   `nomeProfessor` varchar(300) NOT NULL,
   `formacaoProfessor` varchar(1000) DEFAULT NULL,
   PRIMARY KEY (`codProfessor`)
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
--- Copiando dados para a tabela aula2e.professores: ~0 rows (aproximadamente)
+-- Copiando dados para a tabela aula2e.professores: ~4 rows (aproximadamente)
 INSERT INTO `professores` (`codProfessor`, `nomeProfessor`, `formacaoProfessor`) VALUES
 	(1, 'Cristina Almeida', 'Ciencia da computação'),
 	(2, 'João Roberto Caixeta', NULL),
 	(3, 'Paulize Ramos', 'Química'),
-	(4, 'Vlander Verdade', NULL);
+	(4, 'Vlander Verdade', NULL),
+	(5, 'Daniela Guimarães', 'Ciencia da computacao'),
+	(6, 'Poliana Ester', NULL);
 
 -- Copiando estrutura para tabela aula2e.professoresporturmas
 DROP TABLE IF EXISTS `professoresporturmas`;
@@ -57,9 +59,18 @@ CREATE TABLE IF NOT EXISTS `turmas` (
   `nomeTurma` varchar(150) NOT NULL,
   `anoIngresso` year NOT NULL,
   PRIMARY KEY (`codTurma`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- Copiando dados para a tabela aula2e.turmas: ~0 rows (aproximadamente)
+INSERT INTO `turmas` (`codTurma`, `nomeTurma`, `anoIngresso`) VALUES
+	(1, '1INFOA', '2025'),
+	(2, '1INFOB', '2025'),
+	(3, '1INFOC', '2025'),
+	(4, '2INFOD', '2024'),
+	(5, '2INFOE', '2024'),
+	(6, '2INFOF', '2024'),
+	(7, '3INFOG', '2023'),
+	(8, '3INFOH', '2023');
 
 /*!40103 SET TIME_ZONE=IFNULL(@OLD_TIME_ZONE, 'system') */;
 /*!40101 SET SQL_MODE=IFNULL(@OLD_SQL_MODE, '') */;
