@@ -29,7 +29,7 @@ CREATE TABLE IF NOT EXISTS `professores` (
   PRIMARY KEY (`codProfessor`)
 ) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
--- Copiando dados para a tabela aula2e.professores: ~4 rows (aproximadamente)
+-- Copiando dados para a tabela aula2e.professores: ~6 rows (aproximadamente)
 INSERT INTO `professores` (`codProfessor`, `nomeProfessor`, `formacaoProfessor`) VALUES
 	(1, 'Cristina Almeida', 'Ciencia da computação'),
 	(2, 'João Roberto Caixeta', NULL),
@@ -59,9 +59,9 @@ CREATE TABLE IF NOT EXISTS `turmas` (
   `nomeTurma` varchar(150) NOT NULL,
   `anoIngresso` year NOT NULL,
   PRIMARY KEY (`codTurma`)
-) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=14 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
--- Copiando dados para a tabela aula2e.turmas: ~0 rows (aproximadamente)
+-- Copiando dados para a tabela aula2e.turmas: ~11 rows (aproximadamente)
 INSERT INTO `turmas` (`codTurma`, `nomeTurma`, `anoIngresso`) VALUES
 	(1, '1INFOA', '2025'),
 	(2, '1INFOB', '2025'),
@@ -70,7 +70,10 @@ INSERT INTO `turmas` (`codTurma`, `nomeTurma`, `anoIngresso`) VALUES
 	(5, '2INFOE', '2024'),
 	(6, '2INFOF', '2024'),
 	(7, '3INFOG', '2023'),
-	(8, '3INFOH', '2023');
+	(8, '3INFOH', '2023'),
+	(11, '1° Sistema de Informações', '2025'),
+	(12, '1° ZOOTECNIA', '2025'),
+	(13, '2° ZOOTECNIA', '2024');
 
 /*!40103 SET TIME_ZONE=IFNULL(@OLD_TIME_ZONE, 'system') */;
 /*!40101 SET SQL_MODE=IFNULL(@OLD_SQL_MODE, '') */;
