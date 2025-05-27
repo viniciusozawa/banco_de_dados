@@ -8,4 +8,4 @@ BEGIN;
 	
 COMMIT;
 	
-	SELECT * FROM professoresporturmas;
+	SELECT * FROM professoresporturmas;revisaonotas
