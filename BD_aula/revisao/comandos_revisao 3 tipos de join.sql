@@ -1,4 +1,4 @@
-
+provapraticaviniciusozawa
 #transacao para inserie 4 alunos
 BEGIN;
 	INSERT INTO alunos VALUE(NULL, "Rodrigo");
