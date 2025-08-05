@@ -20,6 +20,19 @@ DROP DATABASE IF EXISTS `lanchonete2e2025`;
 CREATE DATABASE IF NOT EXISTS `lanchonete2e2025` /*!40100 DEFAULT CHARACTER SET utf8mb3 */ /*!80016 DEFAULT ENCRYPTION='N' */;
 USE `lanchonete2e2025`;
 
+-- Copiando estrutura para tabela lanchonete2e2025.auditoria
+DROP TABLE IF EXISTS `auditoria`;
+CREATE TABLE IF NOT EXISTS `auditoria` (
+  `codAuditoria` int NOT NULL AUTO_INCREMENT,
+  `acao` varchar(600) NOT NULL,
+  `tabela` varchar(40) NOT NULL,
+  `dataHora` datetime NOT NULL,
+  `usuario` varchar(50) NOT NULL,
+  PRIMARY KEY (`codAuditoria`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+
+-- Copiando dados para a tabela lanchonete2e2025.auditoria: ~0 rows (aproximadamente)
+
 -- Copiando estrutura para tabela lanchonete2e2025.cargo
 DROP TABLE IF EXISTS `cargo`;
 CREATE TABLE IF NOT EXISTS `cargo` (
@@ -28,13 +41,13 @@ CREATE TABLE IF NOT EXISTS `cargo` (
   `salarioInicial` float NOT NULL,
   `funcoes` mediumtext,
   PRIMARY KEY (`codCargo`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb3;
 
--- Copiando dados para a tabela lanchonete2e2025.cargo: ~2 rows (aproximadamente)
+-- Copiando dados para a tabela lanchonete2e2025.cargo: ~3 rows (aproximadamente)
 INSERT INTO `cargo` (`codCargo`, `nomeCargo`, `salarioInicial`, `funcoes`) VALUES
-	(1, 'Gerente', 4300.1, 'Administrar funcionários e controlar o estoque'),
-	(2, 'Auxiliar de limpeza', 970.56, 'Limpeza da lanchonete e áreas afins.'),
-	(3, 'Balconista', 1804, 'Realizar o processo de Venda');
+	(1, 'Gerente', 4500.75, 'Administrar funcionários e controlar o estoque'),
+	(2, 'Balconista', 1804, 'Realizar o processo de venda'),
+	(3, 'Auxiliar de limpeza', 980, 'Limpeza da lanchonete e áreas afins.');
 
 -- Copiando estrutura para tabela lanchonete2e2025.categoria
 DROP TABLE IF EXISTS `categoria`;
@@ -63,12 +76,12 @@ CREATE TABLE IF NOT EXISTS `cliente` (
   PRIMARY KEY (`codCliente`)
 ) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb3;
 
--- Copiando dados para a tabela lanchonete2e2025.cliente: ~0 rows (aproximadamente)
+-- Copiando dados para a tabela lanchonete2e2025.cliente: ~4 rows (aproximadamente)
 INSERT INTO `cliente` (`codCliente`, `nomeCliente`, `dataNascimento`, `telefones`, `email`, `endereco`, `bairro`, `cidade`, `cep`, `estado`, `cpf`) VALUES
 	(1, 'Cliente à vista', NULL, NULL, NULL, NULL, NULL, 'Machado', '37.750-000', 'MG', NULL),
 	(2, 'Márcia Silva', NULL, NULL, NULL, NULL, NULL, 'Machado', '37.750-000', 'MG', NULL),
-	(3, 'Patrick Pereira', '2000-08-23', NULL, NULL, 'Rua Bejamin, 23', 'Jardim', 'Alfenas', '37.215-012', 'MG', NULL),
-	(4, 'Roseli', NULL, NULL, NULL, NULL, NULL, 'Machado', '37.750-000', 'MG', '023.102.843-13');
+	(3, 'Patrick Pereira', '1980-12-05', NULL, NULL, 'Rua das Flores, 23', 'Jardim Primavera', 'Alfenas', '37.135-248', 'MG', NULL),
+	(4, 'Roseli Xavier', NULL, NULL, NULL, NULL, NULL, 'Machado', '37.750-000', 'MG', '023.040.999-77');
 
 -- Copiando estrutura para tabela lanchonete2e2025.funcionario
 DROP TABLE IF EXISTS `funcionario`;
@@ -95,26 +108,30 @@ CREATE TABLE IF NOT EXISTS `funcionario` (
   PRIMARY KEY (`codFuncionario`,`cargo_codCargo`),
   KEY `fk_funcionario_cargo1_idx` (`cargo_codCargo`),
   CONSTRAINT `fk_funcionario_cargo1` FOREIGN KEY (`cargo_codCargo`) REFERENCES `cargo` (`codCargo`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb3;
 
--- Copiando dados para a tabela lanchonete2e2025.funcionario: ~0 rows (aproximadamente)
+-- Copiando dados para a tabela lanchonete2e2025.funcionario: ~2 rows (aproximadamente)
+INSERT INTO `funcionario` (`codFuncionario`, `nomeFuncionario`, `carteiraTrabalho`, `cpf`, `rg`, `orgaoExpedidor`, `dataExpedicao`, `dataNascimento`, `dataContratacao`, `dataDemissao`, `telefones`, `email`, `endereco`, `bairro`, `cidade`, `cep`, `estado`, `salarioAtual`, `cargo_codCargo`) VALUES
+	(1, 'Felipe Teixeira', NULL, '036.777.888-45', NULL, NULL, NULL, '1969-04-18', NULL, NULL, '(35)98811-1234', NULL, NULL, NULL, 'Machado', '37.750-000', 'MG', NULL, 1),
+	(2, 'Márcia Alves', NULL, '999.888.888-45', NULL, NULL, NULL, '1978-12-20', NULL, NULL, '(35)3295-4545', NULL, NULL, NULL, 'Machado', '37.750-000', 'MG', NULL, 2);
 
--- Copiando estrutura para tabela lanchonete2e2025.ingredientes
-DROP TABLE IF EXISTS `ingredientes`;
-CREATE TABLE IF NOT EXISTS `ingredientes` (
-  `codIngredientes` int NOT NULL AUTO_INCREMENT,
-  `nomeIngredientes` varchar(100) NOT NULL,
+-- Copiando estrutura para tabela lanchonete2e2025.ingrediente
+DROP TABLE IF EXISTS `ingrediente`;
+CREATE TABLE IF NOT EXISTS `ingrediente` (
+  `codIngrediente` int NOT NULL AUTO_INCREMENT,
+  `nomeIngrediente` varchar(100) NOT NULL,
   `principaisUsos` varchar(2000) DEFAULT NULL,
-  `mediaCompra` varchar(50) DEFAULT NULL,
+  `medidaCompra` varchar(50) DEFAULT NULL,
   `estoqueIngrediente` float DEFAULT NULL,
-  PRIMARY KEY (`codIngredientes`)
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb3;
+  PRIMARY KEY (`codIngrediente`)
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
--- Copiando dados para a tabela lanchonete2e2025.ingredientes: ~5 rows (aproximadamente)
-INSERT INTO `ingredientes` (`codIngredientes`, `nomeIngredientes`, `principaisUsos`, `mediaCompra`, `estoqueIngrediente`) VALUES
-	(1, 'Farinha de trigo', 'Pães, bolos, massas, empanados', 'Kg', 138),
+-- Copiando dados para a tabela lanchonete2e2025.ingrediente: ~5 rows (aproximadamente)
+INSERT INTO `ingrediente` (`codIngrediente`, `nomeIngrediente`, `principaisUsos`, `medidaCompra`, `estoqueIngrediente`) VALUES
+	(1, 'Farinha de trigo', '	Pães, bolos, massas, empanados', 'Kg', 138),
 	(2, 'Açúcar cristal', 'Bolos, sobremesas, bebidas', 'Kg', 90),
-	(4, 'Creme de leite', 'Molhos, recheios, sobremesas, mousses', 'Unidade', 47),
+	(3, 'Sal refinado', 'Temperos, cozimento em geral, conservas', 'Kg', 32),
+	(4, 'Creme de leite', 'Molhos, recheios, sobremesas, mousses', 'Unidade', 25),
 	(5, 'Leite integral', 'Bolos, cremes, molhos brancos', 'Litro', 28);
 
 -- Copiando estrutura para tabela lanchonete2e2025.itensvenda
@@ -133,28 +150,63 @@ CREATE TABLE IF NOT EXISTS `itensvenda` (
 
 -- Copiando dados para a tabela lanchonete2e2025.itensvenda: ~0 rows (aproximadamente)
 
--- Copiando estrutura para tabela lanchonete2e2025.log
-DROP TABLE IF EXISTS `log`;
-CREATE TABLE IF NOT EXISTS `log` (
-  `idlog` int NOT NULL AUTO_INCREMENT,
-  `acao` varchar(600) NOT NULL,
-  `tabela` varchar(45) NOT NULL,
-  `dataHora` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `usuario` varchar(50) NOT NULL,
-  PRIMARY KEY (`idlog`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
-
--- Copiando dados para a tabela lanchonete2e2025.log: ~0 rows (aproximadamente)
-
 -- Copiando estrutura para tabela lanchonete2e2025.marca
 DROP TABLE IF EXISTS `marca`;
 CREATE TABLE IF NOT EXISTS `marca` (
   `codMarca` int NOT NULL AUTO_INCREMENT,
   `nomeMarca` varchar(150) NOT NULL,
   PRIMARY KEY (`codMarca`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb3;
 
 -- Copiando dados para a tabela lanchonete2e2025.marca: ~0 rows (aproximadamente)
+INSERT INTO `marca` (`codMarca`, `nomeMarca`) VALUES
+	(1, 'Bauducco'),
+	(2, 'Papel'),
+	(3, 'Elma chips'),
+	(4, 'Coca-Cola'),
+	(5, 'Lacta'),
+	(6, 'Nestle');
+
+-- Copiando estrutura para procedure lanchonete2e2025.proc_alomundo
+DROP PROCEDURE IF EXISTS `proc_alomundo`;
+DELIMITER //
+CREATE PROCEDURE `proc_alomundo`()
+BEGIN
+	SELECT "alo mudo";
+	
+	
+	
+END//
+DELIMITER ;
+
+-- Copiando estrutura para procedure lanchonete2e2025.proc_aluno
+DROP PROCEDURE IF EXISTS `proc_aluno`;
+DELIMITER //
+CREATE PROCEDURE `proc_aluno`()
+BEGIN
+	SELECT "alo mundo";
+END//
+DELIMITER ;
+
+-- Copiando estrutura para procedure lanchonete2e2025.proc_imprimeFrase
+DROP PROCEDURE IF EXISTS `proc_imprimeFrase`;
+DELIMITER //
+CREATE PROCEDURE `proc_imprimeFrase`(IN frase VARCHAR(300))
+BEGIN
+	SELECT frase AS mensagem;
+END//
+DELIMITER ;
+
+-- Copiando estrutura para procedure lanchonete2e2025.proc_insereMarca
+DROP PROCEDURE IF EXISTS `proc_insereMarca`;
+DELIMITER //
+CREATE PROCEDURE `proc_insereMarca`(
+	IN `entrada_nomeMarca` VARCHAR(150)
+)
+BEGIN
+	INSERT INTO marca(nomeMarca) VALUES(entrada_nomeMarca);
+END//
+DELIMITER ;
 
 -- Copiando estrutura para tabela lanchonete2e2025.produto
 DROP TABLE IF EXISTS `produto`;
@@ -174,7 +226,7 @@ CREATE TABLE IF NOT EXISTS `produto` (
   KEY `fk_produto_categoria1_idx` (`categoria_codCategoria`),
   CONSTRAINT `fk_produto_categoria1` FOREIGN KEY (`categoria_codCategoria`) REFERENCES `categoria` (`codCategoria`),
   CONSTRAINT `fk_produto_marca` FOREIGN KEY (`marca_codMarca`) REFERENCES `marca` (`codMarca`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb3;
 
 -- Copiando dados para a tabela lanchonete2e2025.produto: ~0 rows (aproximadamente)
 
@@ -206,6 +258,7 @@ CREATE TABLE `vi_cargos_altos_salarios` (
 DROP VIEW IF EXISTS `vi_cargos_ordenados_salario`;
 -- Criando tabela temporária para evitar erros de dependência de VIEW
 CREATE TABLE `vi_cargos_ordenados_salario` (
+	`codCargo` INT NOT NULL,
 	`nomeCargo` VARCHAR(1) NOT NULL COLLATE 'utf8mb3_general_ci',
 	`salarioInicial` FLOAT NOT NULL
 ) ENGINE=MyISAM;
@@ -226,33 +279,61 @@ DROP VIEW IF EXISTS `vi_dadosclientes`;
 -- Criando tabela temporária para evitar erros de dependência de VIEW
 CREATE TABLE `vi_dadosclientes` (
 	`nomeCliente` VARCHAR(1) NOT NULL COLLATE 'utf8mb3_general_ci',
-	`Nascimento` VARCHAR(1) NULL COLLATE 'utf8mb4_general_ci',
+	`nascimento` VARCHAR(1) NULL COLLATE 'utf8mb4_0900_ai_ci',
 	`cpf` VARCHAR(1) NULL COLLATE 'utf8mb3_general_ci'
 ) ENGINE=MyISAM;
 
--- Copiando estrutura para view lanchonete2e2025.vi_idadecliestes
-DROP VIEW IF EXISTS `vi_idadecliestes`;
+-- Copiando estrutura para view lanchonete2e2025.vi_idadeclientes
+DROP VIEW IF EXISTS `vi_idadeclientes`;
 -- Criando tabela temporária para evitar erros de dependência de VIEW
-CREATE TABLE `vi_idadecliestes` (
+CREATE TABLE `vi_idadeclientes` (
 	`nomeCliente` VARCHAR(1) NOT NULL COLLATE 'utf8mb3_general_ci',
-	`Data_Nascimento` VARCHAR(1) NULL COLLATE 'utf8mb4_general_ci',
-	`Idade` BIGINT NULL
+	`nascimento` VARCHAR(1) NULL COLLATE 'utf8mb4_0900_ai_ci',
+	`idade` BIGINT NULL
 ) ENGINE=MyISAM;
 
--- Copiando estrutura para view lanchonete2e2025.vi_ingredientes_bolos
-DROP VIEW IF EXISTS `vi_ingredientes_bolos`;
+-- Copiando estrutura para view lanchonete2e2025.vi_idadefuncionarios
+DROP VIEW IF EXISTS `vi_idadefuncionarios`;
 -- Criando tabela temporária para evitar erros de dependência de VIEW
-CREATE TABLE `vi_ingredientes_bolos` (
-	`nomeIngredientes` VARCHAR(1) NOT NULL COLLATE 'utf8mb3_general_ci'
+CREATE TABLE `vi_idadefuncionarios` (
+	`nomeFuncionario` VARCHAR(1) NOT NULL COLLATE 'utf8mb3_general_ci',
+	`nascimento` VARCHAR(1) NULL COLLATE 'utf8mb4_0900_ai_ci',
+	`idade` BIGINT NULL
 ) ENGINE=MyISAM;
 
--- Copiando estrutura para view lanchonete2e2025.vi_ingredientes_estoque_abaixo
-DROP VIEW IF EXISTS `vi_ingredientes_estoque_abaixo`;
+-- Copiando estrutura para view lanchonete2e2025.vi_informacoesfuncionarios
+DROP VIEW IF EXISTS `vi_informacoesfuncionarios`;
 -- Criando tabela temporária para evitar erros de dependência de VIEW
-CREATE TABLE `vi_ingredientes_estoque_abaixo` (
-	`nomeIngredientes` VARCHAR(1) NOT NULL COLLATE 'utf8mb3_general_ci',
-	`mediaCompra` VARCHAR(1) NULL COLLATE 'utf8mb3_general_ci',
+CREATE TABLE `vi_informacoesfuncionarios` (
+	`codFuncionario` INT NOT NULL,
+	`cpf` VARCHAR(1) NOT NULL COLLATE 'utf8mb3_general_ci',
+	`nomeFuncionario` VARCHAR(1) NOT NULL COLLATE 'utf8mb3_general_ci',
+	`nomeCargo` VARCHAR(1) NOT NULL COLLATE 'utf8mb3_general_ci'
+) ENGINE=MyISAM;
+
+-- Copiando estrutura para view lanchonete2e2025.vi_ingredientes_bolo
+DROP VIEW IF EXISTS `vi_ingredientes_bolo`;
+-- Criando tabela temporária para evitar erros de dependência de VIEW
+CREATE TABLE `vi_ingredientes_bolo` (
+	`nomeIngrediente` VARCHAR(1) NOT NULL COLLATE 'utf8mb4_0900_ai_ci'
+) ENGINE=MyISAM;
+
+-- Copiando estrutura para view lanchonete2e2025.vi_ingredientes_estoque_baixo
+DROP VIEW IF EXISTS `vi_ingredientes_estoque_baixo`;
+-- Criando tabela temporária para evitar erros de dependência de VIEW
+CREATE TABLE `vi_ingredientes_estoque_baixo` (
+	`nomeIngrediente` VARCHAR(1) NOT NULL COLLATE 'utf8mb4_0900_ai_ci',
+	`medidaCompra` VARCHAR(1) NULL COLLATE 'utf8mb4_0900_ai_ci',
 	`estoqueIngrediente` FLOAT NULL
+) ENGINE=MyISAM;
+
+-- Copiando estrutura para view lanchonete2e2025.vi_nascimentofuncionarios
+DROP VIEW IF EXISTS `vi_nascimentofuncionarios`;
+-- Criando tabela temporária para evitar erros de dependência de VIEW
+CREATE TABLE `vi_nascimentofuncionarios` (
+	`nomeFuncionario` VARCHAR(1) NOT NULL COLLATE 'utf8mb3_general_ci',
+	`cpf` VARCHAR(1) NOT NULL COLLATE 'utf8mb3_general_ci',
+	`nascimento` VARCHAR(1) NULL COLLATE 'utf8mb4_0900_ai_ci'
 ) ENGINE=MyISAM;
 
 -- Copiando estrutura para view lanchonete2e2025.vi_totalclientes
@@ -264,12 +345,12 @@ CREATE TABLE `vi_totalclientes` (
 
 -- Removendo tabela temporária e criando a estrutura VIEW final
 DROP TABLE IF EXISTS `vi_cargos_altos_salarios`;
-CREATE ALGORITHM=UNDEFINED SQL SECURITY DEFINER VIEW `vi_cargos_altos_salarios` AS select `c`.`nomeCargo` AS `nomeCargo` from `cargo` `c` where (`c`.`salarioInicial` > 2000)
+CREATE ALGORITHM=UNDEFINED SQL SECURITY DEFINER VIEW `vi_cargos_altos_salarios` AS select `cargo`.`nomeCargo` AS `nomeCargo` from `cargo` where (`cargo`.`salarioInicial` > 2000)
 ;
 
 -- Removendo tabela temporária e criando a estrutura VIEW final
 DROP TABLE IF EXISTS `vi_cargos_ordenados_salario`;
-CREATE ALGORITHM=UNDEFINED SQL SECURITY DEFINER VIEW `vi_cargos_ordenados_salario` AS select `c`.`nomeCargo` AS `nomeCargo`,`c`.`salarioInicial` AS `salarioInicial` from `cargo` `c` order by `c`.`salarioInicial`
+CREATE ALGORITHM=UNDEFINED SQL SECURITY DEFINER VIEW `vi_cargos_ordenados_salario` AS select `cargo`.`codCargo` AS `codCargo`,`cargo`.`nomeCargo` AS `nomeCargo`,`cargo`.`salarioInicial` AS `salarioInicial` from `cargo` order by `cargo`.`salarioInicial`
 ;
 
 -- Removendo tabela temporária e criando a estrutura VIEW final
@@ -279,22 +360,37 @@ CREATE ALGORITHM=UNDEFINED SQL SECURITY DEFINER VIEW `vi_clientesexternos` AS se
 
 -- Removendo tabela temporária e criando a estrutura VIEW final
 DROP TABLE IF EXISTS `vi_dadosclientes`;
-CREATE ALGORITHM=UNDEFINED SQL SECURITY DEFINER VIEW `vi_dadosclientes` AS select `c`.`nomeCliente` AS `nomeCliente`,date_format(`c`.`dataNascimento`,'%d/%m/%Y') AS `Nascimento`,`c`.`cpf` AS `cpf` from `cliente` `c` where ((`c`.`dataNascimento` is not null) or (`c`.`cpf` is not null))
+CREATE ALGORITHM=UNDEFINED SQL SECURITY DEFINER VIEW `vi_dadosclientes` AS select `c`.`nomeCliente` AS `nomeCliente`,date_format(`c`.`dataNascimento`,'%d/%m/%Y') AS `nascimento`,`c`.`cpf` AS `cpf` from `cliente` `c` where ((`c`.`dataNascimento` is not null) or (`c`.`cpf` is not null))
 ;
 
 -- Removendo tabela temporária e criando a estrutura VIEW final
-DROP TABLE IF EXISTS `vi_idadecliestes`;
-CREATE ALGORITHM=UNDEFINED SQL SECURITY DEFINER VIEW `vi_idadecliestes` AS select `c`.`nomeCliente` AS `nomeCliente`,date_format(`c`.`dataNascimento`,'%d/%m/%Y') AS `Data_Nascimento`,floor(((to_days(curdate()) - to_days(`c`.`dataNascimento`)) / 365)) AS `Idade` from `cliente` `c` where (`c`.`dataNascimento` is not null)
+DROP TABLE IF EXISTS `vi_idadeclientes`;
+CREATE ALGORITHM=UNDEFINED SQL SECURITY DEFINER VIEW `vi_idadeclientes` AS select `c`.`nomeCliente` AS `nomeCliente`,date_format(`c`.`dataNascimento`,'%d/%m/%Y') AS `nascimento`,floor(((to_days(curdate()) - to_days(`c`.`dataNascimento`)) / 365)) AS `idade` from `cliente` `c` where (`c`.`dataNascimento` is not null)
 ;
 
 -- Removendo tabela temporária e criando a estrutura VIEW final
-DROP TABLE IF EXISTS `vi_ingredientes_bolos`;
-CREATE ALGORITHM=UNDEFINED SQL SECURITY DEFINER VIEW `vi_ingredientes_bolos` AS select `ingredientes`.`nomeIngredientes` AS `nomeIngredientes` from `ingredientes` where (`ingredientes`.`principaisUsos` like '%bolos%')
+DROP TABLE IF EXISTS `vi_idadefuncionarios`;
+CREATE ALGORITHM=UNDEFINED SQL SECURITY DEFINER VIEW `vi_idadefuncionarios` AS select `f`.`nomeFuncionario` AS `nomeFuncionario`,date_format(`f`.`dataNascimento`,'%d/%m/%Y') AS `nascimento`,floor(((to_days(curdate()) - to_days(`f`.`dataNascimento`)) / 365)) AS `idade` from `funcionario` `f`
 ;
 
 -- Removendo tabela temporária e criando a estrutura VIEW final
-DROP TABLE IF EXISTS `vi_ingredientes_estoque_abaixo`;
-CREATE ALGORITHM=UNDEFINED SQL SECURITY DEFINER VIEW `vi_ingredientes_estoque_abaixo` AS select `i`.`nomeIngredientes` AS `nomeIngredientes`,`i`.`mediaCompra` AS `mediaCompra`,`i`.`estoqueIngrediente` AS `estoqueIngrediente` from `ingredientes` `i` where (`i`.`estoqueIngrediente` < 30)
+DROP TABLE IF EXISTS `vi_informacoesfuncionarios`;
+CREATE ALGORITHM=UNDEFINED SQL SECURITY DEFINER VIEW `vi_informacoesfuncionarios` AS select `f`.`codFuncionario` AS `codFuncionario`,`f`.`cpf` AS `cpf`,`f`.`nomeFuncionario` AS `nomeFuncionario`,`c`.`nomeCargo` AS `nomeCargo` from (`funcionario` `f` join `cargo` `c` on((`f`.`cargo_codCargo` = `c`.`codCargo`)))
+;
+
+-- Removendo tabela temporária e criando a estrutura VIEW final
+DROP TABLE IF EXISTS `vi_ingredientes_bolo`;
+CREATE ALGORITHM=UNDEFINED SQL SECURITY DEFINER VIEW `vi_ingredientes_bolo` AS select `ingrediente`.`nomeIngrediente` AS `nomeIngrediente` from `ingrediente` where (`ingrediente`.`principaisUsos` like '%bolos%')
+;
+
+-- Removendo tabela temporária e criando a estrutura VIEW final
+DROP TABLE IF EXISTS `vi_ingredientes_estoque_baixo`;
+CREATE ALGORITHM=UNDEFINED SQL SECURITY DEFINER VIEW `vi_ingredientes_estoque_baixo` AS select `ingrediente`.`nomeIngrediente` AS `nomeIngrediente`,`ingrediente`.`medidaCompra` AS `medidaCompra`,`ingrediente`.`estoqueIngrediente` AS `estoqueIngrediente` from `ingrediente` where (`ingrediente`.`estoqueIngrediente` < 30)
+;
+
+-- Removendo tabela temporária e criando a estrutura VIEW final
+DROP TABLE IF EXISTS `vi_nascimentofuncionarios`;
+CREATE ALGORITHM=UNDEFINED SQL SECURITY DEFINER VIEW `vi_nascimentofuncionarios` AS select `f`.`nomeFuncionario` AS `nomeFuncionario`,`f`.`cpf` AS `cpf`,date_format(`f`.`dataNascimento`,'%d/%m/%Y') AS `nascimento` from `funcionario` `f`
 ;
 
 -- Removendo tabela temporária e criando a estrutura VIEW final
