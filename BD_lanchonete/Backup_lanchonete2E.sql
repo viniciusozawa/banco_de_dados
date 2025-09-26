@@ -55,12 +55,15 @@ CREATE TABLE IF NOT EXISTS `categoria` (
   `codCategoria` int NOT NULL AUTO_INCREMENT,
   `nomeCategoria` varchar(300) NOT NULL,
   PRIMARY KEY (`codCategoria`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb3;
 
--- Copiando dados para a tabela lanchonete2e2025.categoria: ~0 rows (aproximadamente)
+-- Copiando dados para a tabela lanchonete2e2025.categoria: ~5 rows (aproximadamente)
 INSERT INTO `categoria` (`codCategoria`, `nomeCategoria`) VALUES
-	(2, 'Chocolate'),
-	(3, 'salgado');
+	(1, 'Salgado'),
+	(2, 'Sobremesa'),
+	(3, 'Refrigerante em lata'),
+	(4, 'Refrigerante de 600 ml'),
+	(5, 'Chocolate');
 
 -- Copiando estrutura para tabela lanchonete2e2025.cliente
 DROP TABLE IF EXISTS `cliente`;
@@ -77,17 +80,14 @@ CREATE TABLE IF NOT EXISTS `cliente` (
   `estado` char(2) DEFAULT 'MG',
   `cpf` varchar(20) DEFAULT NULL,
   PRIMARY KEY (`codCliente`)
-) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb3;
 
--- Copiando dados para a tabela lanchonete2e2025.cliente: ~6 rows (aproximadamente)
+-- Copiando dados para a tabela lanchonete2e2025.cliente: ~4 rows (aproximadamente)
 INSERT INTO `cliente` (`codCliente`, `nomeCliente`, `dataNascimento`, `telefones`, `email`, `endereco`, `bairro`, `cidade`, `cep`, `estado`, `cpf`) VALUES
-	(1, 'Cliente à vista', NULL, NULL, NULL, NULL, NULL, 'Machado', '37.750-000', 'MG', NULL),
-	(2, 'Márcia Silva', NULL, NULL, NULL, NULL, NULL, 'Machado', '37.750-000', 'MG', NULL),
+	(1, 'Cliente à vista', '2004-09-08', NULL, NULL, NULL, NULL, 'Machado', '37.750-000', 'MG', NULL),
+	(2, 'Márcia Silva', '1999-09-23', NULL, NULL, NULL, NULL, 'Machado', '37.750-000', 'MG', NULL),
 	(3, 'Patrick Pereira', '1980-12-05', NULL, NULL, 'Rua das Flores, 23', 'Jardim Primavera', 'Alfenas', '37.135-248', 'MG', NULL),
-	(4, 'Roseli Xavier', NULL, NULL, NULL, NULL, NULL, 'Machado', '37.750-000', 'MG', '023.040.999-77'),
-	(5, 'Yuji', '2023-03-12', 'tt', 'tt', 'tt', 'tt', 'Paraguaçu', 'tt', 'tt', 'tt'),
-	(6, 'j', NULL, NULL, NULL, NULL, NULL, 'Machado', '37.750-000', 'MG', NULL),
-	(7, 'd', NULL, NULL, NULL, NULL, NULL, 'Machado', '37.750-000', 'MG', NULL);
+	(4, 'Roseli Xavier', NULL, NULL, NULL, NULL, NULL, 'Machado', '37.750-000', 'MG', '023.040.999-77');
 
 -- Copiando estrutura para tabela lanchonete2e2025.funcionario
 DROP TABLE IF EXISTS `funcionario`;
@@ -154,11 +154,11 @@ CREATE TABLE IF NOT EXISTS `itensvenda` (
   CONSTRAINT `fk_venda_has_produto_venda1` FOREIGN KEY (`venda_codVenda`) REFERENCES `venda` (`codVenda`)
 ) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb3;
 
--- Copiando dados para a tabela lanchonete2e2025.itensvenda: ~0 rows (aproximadamente)
+-- Copiando dados para a tabela lanchonete2e2025.itensvenda: ~3 rows (aproximadamente)
 INSERT INTO `itensvenda` (`codItensVenda`, `venda_codVenda`, `produto_codProduto`, `quantVenda`) VALUES
 	(1, 1, 4, 3),
-	(2, 1, 5, 2),
-	(3, 2, 4, 1);
+	(2, 1, 2, 3),
+	(3, 2, 3, 1);
 
 -- Copiando estrutura para tabela lanchonete2e2025.marca
 DROP TABLE IF EXISTS `marca`;
@@ -166,112 +166,84 @@ CREATE TABLE IF NOT EXISTS `marca` (
   `codMarca` int NOT NULL AUTO_INCREMENT,
   `nomeMarca` varchar(150) NOT NULL,
   PRIMARY KEY (`codMarca`)
-) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8mb3;
 
--- Copiando dados para a tabela lanchonete2e2025.marca: ~6 rows (aproximadamente)
+-- Copiando dados para a tabela lanchonete2e2025.marca: ~9 rows (aproximadamente)
 INSERT INTO `marca` (`codMarca`, `nomeMarca`) VALUES
-	(1, 'Bauducco'),
-	(2, 'Papel'),
-	(3, 'Elma chips'),
-	(4, 'Coca-Cola'),
-	(5, 'Lacta'),
-	(6, 'Nestle');
+	(1, 'Pepsi'),
+	(2, 'Bauducco'),
+	(3, 'Fabricação Própria'),
+	(4, 'Elma Chips'),
+	(5, 'Coca-Cola'),
+	(6, 'Lacta'),
+	(7, 'Nestlé'),
+	(8, 'Marilan'),
+	(10, 'outro teste 15/08');
 
 -- Copiando estrutura para procedure lanchonete2e2025.proc_ajustesPrecoProdutos
 DROP PROCEDURE IF EXISTS `proc_ajustesPrecoProdutos`;
 DELIMITER //
 CREATE PROCEDURE `proc_ajustesPrecoProdutos`(
-	IN `opcaoEntrada` VARCHAR(50),
-	IN `margemDesejada` DECIMAL(4,1),
-	IN `Param3` INT
+	IN `opcao` VARCHAR(20),
+	IN `margemDesejada` DECIMAL(4,1)
 )
 BEGIN
-	if( opcaoEntrada = "aumentar" ) then
-		UPDATE produto SET precoVenda = 
-			precovenda + ( precoVenda * margemDesejada/100);
-		
-		ELSE IF ( opcaoEntrada = "diminuir" ) then
-			UPDATE produto SET precoVenda = 
-				precovenda - ( precoVenda * margemDesejada/100);
-				
-				
-		END if;
-	
+	if (opcao = "aumentar")
+		then UPDATE produto SET precoVenda = 
+				precoVenda + (precoVenda * margemDesejada/100), margemLucro = margemDesejada;
+		ELSE if (opcao = "diminuir")
+					then UPDATE produto SET precoVenda = 
+				precoVenda - (precoVenda * margemDesejada/100), margemLucro = margemDesejada;
+					ELSE SELECT "Opção inválida" AS ERRO;
+				END if;
 	END if;
+	SELECT * FROM produto;
 END//
 DELIMITER ;
 
--- Copiando estrutura para procedure lanchonete2e2025.proc_alomundo
-DROP PROCEDURE IF EXISTS `proc_alomundo`;
+-- Copiando estrutura para procedure lanchonete2e2025.proc_aloMundo
+DROP PROCEDURE IF EXISTS `proc_aloMundo`;
 DELIMITER //
-CREATE PROCEDURE `proc_alomundo`()
+CREATE PROCEDURE `proc_aloMundo`()
 BEGIN
-	SELECT "alo mudo";
-	
-	
-	
+		SELECT "Alô Mundo!" AS mensagem;
 END//
 DELIMITER ;
 
--- Copiando estrutura para procedure lanchonete2e2025.proc_alteraCategoria
-DROP PROCEDURE IF EXISTS `proc_alteraCategoria`;
+-- Copiando estrutura para procedure lanchonete2e2025.proc_aloMundoGrafico
+DROP PROCEDURE IF EXISTS `proc_aloMundoGrafico`;
 DELIMITER //
-CREATE PROCEDURE `proc_alteraCategoria`(
-	IN `codigoEntrada` INT,
-	IN `nomeEntrada` VARCHAR(150)
-)
+CREATE PROCEDURE `proc_aloMundoGrafico`()
 BEGIN
-	SELECT COUNT(*) INTO @contador FROM categoria AS c WHERE c.codCategoria = codigoEntrada;
-	
-	if(@contador)
-		then 
-			UPDATE categoria SET nomeCategoria = nomeEntrada WHERE codCategoria = codigoEntrada;
-			SELECT nomeCategoria AS "Categoria Alterado" FROM categoria;
-		ELSE
-			SELECT "Erro ao encontrar o código da Categoria" AS "ERRO";
-	END if;
-	
-	
+	SELECT "Alô mundo..." AS mensagem;
 END//
 DELIMITER ;
 
--- Copiando estrutura para procedure lanchonete2e2025.proc_alteraCliente
-DROP PROCEDURE IF EXISTS `proc_alteraCliente`;
+-- Copiando estrutura para procedure lanchonete2e2025.proc_alteraMarca
+DROP PROCEDURE IF EXISTS `proc_alteraMarca`;
 DELIMITER //
-CREATE PROCEDURE `proc_alteraCliente`(
+CREATE PROCEDURE `proc_alteraMarca`(
 	IN `codAlterar` INT,
-	IN `entradaDataNasc` DATE,
-	IN `entradaTelefone` VARCHAR(300),
-	IN `entradaEmail` VARCHAR(150),
-	IN `entradaEndereco` VARCHAR(150),
-	IN `entradaBairro` VARCHAR(150),
-	IN `entradaCidade` VARCHAR(150),
-	IN `entradaCep` VARCHAR(50),
-	IN `entradaEstado` CHAR(2),
-	IN `entradaCpf` VARCHAR(20)
+	IN `nomeAlterar` VARCHAR(150)
 )
 BEGIN
-	SELECT COUNT(*) INTO @contador FROM cliente WHERE codCliente = codAlterar;
-	if (@contador)
-		then
-			UPDATE cliente AS c SET c.dataNascimento = entradaDataNasc, c.telefones = entradaTelefone ,
-			c.email = entradaEmail , c.endereco = entradaEndereco, c.bairro = entradaBairro, 
-			c.cidade = entradaCidade, c.cep = entradaCep, c.estado = entradaEstado, c.cpf = entradaCpf
-			WHERE c.codCliente = codAlterar;
-		
-		else
-			SELECT "Produto não encontrado" AS ERRO;	
+	SELECT COUNT(*) INTO @existe FROM marca WHERE codMarca = codAlterar;
+
+	if (@existe)
+		then UPDATE marca SET nomeMarca = nomeAlterar WHERE codMarca = codAlterar;
+		ELSE SELECT "Marca não encontrada" AS ERRO;
 	END if;
-	SELECT * FROM cliente;
+	
+	SELECT * FROM marca;	
 END//
 DELIMITER ;
 
--- Copiando estrutura para procedure lanchonete2e2025.proc_alterarProduto
-DROP PROCEDURE IF EXISTS `proc_alterarProduto`;
+-- Copiando estrutura para procedure lanchonete2e2025.proc_alteraProduto
+DROP PROCEDURE IF EXISTS `proc_alteraProduto`;
 DELIMITER //
-CREATE PROCEDURE `proc_alterarProduto`(
+CREATE PROCEDURE `proc_alteraProduto`(
 	IN `codAlterar` INT,
-	IN `nomeMarca` VARCHAR(150),
+	IN `nomeAlterar` VARCHAR(150),
 	IN `quantEstoqueAlterar` FLOAT,
 	IN `quantMinimaAlterar` FLOAT,
 	IN `precoCustoAlterar` DECIMAL(6,2),
@@ -281,68 +253,38 @@ CREATE PROCEDURE `proc_alterarProduto`(
 	IN `qualMarca` INT,
 	IN `qualCategoria` INT
 )
+    COMMENT 'Altera campos obrigatórios e opcionais de um produto.'
 BEGIN
 	SELECT COUNT(*) INTO @contador FROM produto WHERE codProduto = codAlterar;
-	if (@contador)
-		then
-			UPDATE produto SET nomeProduto = nomeAlterarl, quantEstoque = quantEstoqueAlterar,
-			quantMinima = quanrMinimaAlterar, precoCusto = precoCustoAlterar, precoVenda = precoVendaAlterar,
-			margemLucro = margemLucroAlterar, validade = validadeAlterar, marca_codMargem = qualMarca,
-			categoria_codCategoria = qualCategoria WHERE codProduto = codAlterar;
-		
-		else
-			SELECT "Produto não encontrado" AS ERRO;	
-	END if;
-	SELECT * FROM produto;
-	
+	if (@contador = 1)
+		then UPDATE produto SET nomeProduto = nomeAlterar, quantEstoque = quantEstoqueAlterar,
+				quantMinima = quantMinimaAlterar, precoCusto = precoCustoAlterar,
+				precoVenda = precoVendaAlterar, margemLucro = margemLucroAlterar,
+				validade = validadeAlterar, marca_codMarca = qualMarca,
+				categoria_codCategoria = qualCategoria WHERE codProduto = codAlterar;
+				SELECT * FROM produto;
+		ELSE SELECT "Produto não encontrado" AS ERRO;
+	END if;	
 END//
 DELIMITER ;
 
--- Copiando estrutura para procedure lanchonete2e2025.proc_aluno
-DROP PROCEDURE IF EXISTS `proc_aluno`;
+-- Copiando estrutura para procedure lanchonete2e2025.proc_apagaMarca
+DROP PROCEDURE IF EXISTS `proc_apagaMarca`;
 DELIMITER //
-CREATE PROCEDURE `proc_aluno`()
-BEGIN
-	SELECT "alo mundo";
-END//
-DELIMITER ;
-
--- Copiando estrutura para procedure lanchonete2e2025.proc_apagaCategoria
-DROP PROCEDURE IF EXISTS `proc_apagaCategoria`;
-DELIMITER //
-CREATE PROCEDURE `proc_apagaCategoria`(
-	IN `codigoEntrada` INT
-)
-BEGIN
-	SELECT COUNT(*) INTO @contador FROM categoria AS c WHERE c.codCategoria = codigoEntrada;
-	
-	if(@contador)
-		then 
-			delete from categoria WHERE codCategoria = codigoEntrada;
-			SELECT "Categoria apagado com sucesso" AS "Categoria";
-		ELSE
-			SELECT "Erro ao encontrar o código da Categoria" AS "ERRO";
-	END if;
-END//
-DELIMITER ;
-
--- Copiando estrutura para procedure lanchonete2e2025.proc_deletaMarca
-DROP PROCEDURE IF EXISTS `proc_deletaMarca`;
-DELIMITER //
-CREATE PROCEDURE `proc_deletaMarca`(
+CREATE PROCEDURE `proc_apagaMarca`(
 	IN `codApagar` INT
 )
 BEGIN
 	SELECT COUNT(*) INTO @contador FROM marca WHERE codMarca = codApagar;
-	if( @contador = 1)
+	if (@contador = 1)
 		then 
 			DELETE FROM marca WHERE codMarca = codApagar;
 			SELECT "Marca apagada com sucesso!" AS mensagem;
-		ELSE 
-			#@SELECT "Marca não encontrada para apagar" AS "ERRO";
-			signal SQLSTATE '45000' SET MESSAGE_TEXT= "Marca não encontrada";
+		else
+			#SELECT "Marca não encontrada." AS ERRO;
+			SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = "Marca não encontrada";
 	END if;
-	
+SELECT * FROM marca;
 END//
 DELIMITER ;
 
@@ -355,27 +297,14 @@ BEGIN
 END//
 DELIMITER ;
 
--- Copiando estrutura para procedure lanchonete2e2025.proc_insereCategroria
-DROP PROCEDURE IF EXISTS `proc_insereCategroria`;
+-- Copiando estrutura para procedure lanchonete2e2025.proc_imprimeFraseGrafico
+DROP PROCEDURE IF EXISTS `proc_imprimeFraseGrafico`;
 DELIMITER //
-CREATE PROCEDURE `proc_insereCategroria`(
-	IN `entrada_Nome` VARCHAR(150)
+CREATE PROCEDURE `proc_imprimeFraseGrafico`(
+	IN `frase` VARCHAR(300)
 )
 BEGIN
-	INSERT INTO categoria(nomeCategoria) VALUES(entrada_Nome);
-	SELECT * FROM categoria;
-END//
-DELIMITER ;
-
--- Copiando estrutura para procedure lanchonete2e2025.proc_insereClientes
-DROP PROCEDURE IF EXISTS `proc_insereClientes`;
-DELIMITER //
-CREATE PROCEDURE `proc_insereClientes`(
-	IN `entradaNome` VARCHAR(150)
-)
-BEGIN
-	INSERT INTO cliente(nomeCliente) VALUES(entradaNome);
-	SELECT * FROM cliente;
+	SELECT frase AS mensagem;
 END//
 DELIMITER ;
 
@@ -383,10 +312,10 @@ DELIMITER ;
 DROP PROCEDURE IF EXISTS `proc_insereMarca`;
 DELIMITER //
 CREATE PROCEDURE `proc_insereMarca`(
-	IN `entrada_nomeMarca` VARCHAR(150)
+	IN `nomeNovo` VARCHAR(150)
 )
 BEGIN
-	INSERT INTO marca(nomeMarca) VALUES(entrada_nomeMarca);
+	INSERT INTO marca(nomeMarca) VALUES(nomeNovo);
 END//
 DELIMITER ;
 
@@ -394,15 +323,20 @@ DELIMITER ;
 DROP PROCEDURE IF EXISTS `proc_insereProduto`;
 DELIMITER //
 CREATE PROCEDURE `proc_insereProduto`(
-	IN `entradaNome` VARCHAR(150),
-	IN `entradaPrecoVenda` DECIMAL(6,2),
-	IN `entradaMarcaCod` INT,
-	IN `entradaCategoriaCod` INT
+	IN `nomeNovo` VARCHAR(150),
+	IN `precoVendaNovo` DECIMAL(6,2),
+	IN `qualMarca` INT,
+	IN `qualCategoria` INT
 )
-    COMMENT 'insere produto preenchendo apenas os campos obrigatórios'
+    COMMENT 'Insere produto preenchendo apenas os campos obrigatórios.'
 BEGIN
-	INSERT INTO produto(nomeProduto, precoVenda, marca_codMarca, categoria_codCategoria)
-	VALUES(entradaNome, entradaPrecoVenda, entradaMarcaCod, entradaCategoriaCod);
+
+	INSERT INTO produto(nomeProduto, precoVenda, 
+	marca_codMarca, categoria_codCategoria)
+	VALUES(nomeNovo, precoVendaNovo, qualMarca, qualCategoria);
+	
+	SELECT * FROM produto;
+
 END//
 DELIMITER ;
 
@@ -416,9 +350,7 @@ CREATE PROCEDURE `proc_media`(
 	OUT `resultado` DECIMAL(3,1)
 )
 BEGIN
-	SET resultado = (nota1 + nota2 + nota3) /3;
-	
-	
+	SET resultado = (nota1 + nota2 + nota3)/3;
 END//
 DELIMITER ;
 
@@ -433,92 +365,48 @@ BEGIN
 END//
 DELIMITER ;
 
--- Copiando estrutura para procedure lanchonete2e2025.proc_relatoriosCliente
-DROP PROCEDURE IF EXISTS `proc_relatoriosCliente`;
+-- Copiando estrutura para procedure lanchonete2e2025.proc_relatoriosCategoria
+DROP PROCEDURE IF EXISTS `proc_relatoriosCategoria`;
 DELIMITER //
-CREATE PROCEDURE `proc_relatoriosCliente`(
-	IN `tipoRelatorio` INT
+CREATE PROCEDURE `proc_relatoriosCategoria`(
+	IN `numeroRelatorio` INT
 )
 BEGIN
-	if( tipoRelatorio = 1 ) then
-		
-		SELECT c.codCliente, c.nomeCliente, c.email , DATE_FORMAT(c.dataNascimento,"%d/%m/%Y") 
-		AS Data_Nascimento FROM cliente AS c;
-		
-		ELSE IF ( tipoRelatorio = 2 ) then
-			
-			SELECT c.nomeCliente, c.telefones, c.cidade , c.estado FROM cliente AS c;
-			
-		
-			ELSE if(tipoRelatorio = 3 )then
-				SELECT c.codCliente, c.nomeCliente, c.cidade , c.estado , c.cep, c.telefones 
-				FROM cliente AS c WHERE c.cidade = "Paraguaçu";
-				
-				else
-					SELECT "Erro: ao encontrar sua opção" AS mensagem;
-			END if;	
-				
-		END if;
-	
-	END if;
-END//
-DELIMITER ;
-
--- Copiando estrutura para procedure lanchonete2e2025.proc_relatoriosProdutos
-DROP PROCEDURE IF EXISTS `proc_relatoriosProdutos`;
-DELIMITER //
-CREATE PROCEDURE `proc_relatoriosProdutos`(
-	IN `opcaoEntrada` VARCHAR(150)
-)
-BEGIN
-	if (opcaoEntrada = "simples") 
-		then
-			SELECT p.nomeProduto, p.precoVenda from produto AS p;
-		ELSE IF (opcaoEntrada = "personalizado")
-			then
-				SELECT p.nomeProduto, p.precoVenda, m.nomeMarca, c.nomeCategoria  FROM produto AS p
-				INNER JOIN marca AS m ON p.marca_codMarca = m.codMarca 
-				INNER JOIN categoria AS c ON p.categoria_codCategoria = c.codCategoria;
-			ELSE IF (opcaoEntrada = "estoque")
-				then
-					SELECT p.codProduto, p.nomeProduto, p.quantEstoque, p.quantMinima FROM produto AS p;
-				ELSE	if (opcaoEntrada = "abaixoEstoque")
-					then
-						SELECT p.nomeProduto FROM produto AS p WHERE p.quantEstoque < p.quantMinima;
-					ELSE IF (opcaoEntrada = "vigilanciaSanitaria")
-						then
-							SELECT p.codProduto, p.nomeProduto, DATE_FORMAT(p.validade,"%d/%m/%y") FROM produto AS p;
-						ELSE IF (opcaoEntrada = "total")
-							then
-							SELECT COUNT(*) AS totalProdutos FROM produto;
-							else
-								SELECT "opacao invalida";
-						END if;
+	if (numeroRelatorio = 1)
+		then SELECT nomeCategoria FROM categoria WHERE nomeCategoria LIKE "%Refrigerante%"; 
+		ELSE if (numeroRelatorio = 2)
+				then SELECT COUNT(*) AS totalCategorias FROM categoria;
+				ELSE if (numeroRelatorio = 3)
+						then SELECT nomeCategoria FROM categoria ORDER BY nomeCategoria;
+						ELSE SIGNAL SQLSTATE '45000'SET MESSAGE_TEXT = "Relatório inexistente";
 					END if;
 				END if;
-			END if;
-		END if;
 	END if;
-END//
+	END//
 DELIMITER ;
 
--- Copiando estrutura para procedure lanchonete2e2025.proc_updateMarca
-DROP PROCEDURE IF EXISTS `proc_updateMarca`;
+-- Copiando estrutura para procedure lanchonete2e2025.proc_relatoriosMarca
+DROP PROCEDURE IF EXISTS `proc_relatoriosMarca`;
 DELIMITER //
-CREATE PROCEDURE `proc_updateMarca`(
-	IN `codAlter` INT,
-	IN `nomeAlter` INT
+CREATE PROCEDURE `proc_relatoriosMarca`(
+	IN `tipoRelatorio` CHAR(1)
 )
 BEGIN
-	
-	SELECT COUNT(*) INTO @existe FROM marca WHERE codMarca = codAlter;
-	
-	if (@existe)
-		then UPDATE marca SET nomeMarca = nomeAlter WHERE codMarca = codAlter;
-		ELSE SELECT "Marca não encontrada" AS ERRO;
+	if (tipoRelatorio = "C")
+		then SELECT nomeMarca FROM marca ORDER BY nomeMarca;
+		ELSE if (tipoRelatorio = "D")
+				then SELECT nomeMarca FROM marca ORDER BY nomeMarca DESC;
+				ELSE if (tipoRelatorio = "T")
+						then SELECT COUNT(*) AS totalMarcas FROM marca;
+						ELSE if (tipoRelatorio = "X")
+								then SELECT * FROM marca;
+								#ELSE SELECT "Relatório inexistente." AS ERRO;
+								ELSE SIGNAL SQLSTATE '45000' 
+								SET MESSAGE_TEXT = "Relatório inexistente";
+								end if;
+						END if;
+				END if;
 	END if;
-	
-	SELECT * FROM marca;
 END//
 DELIMITER ;
 
@@ -542,10 +430,12 @@ CREATE TABLE IF NOT EXISTS `produto` (
   CONSTRAINT `fk_produto_marca` FOREIGN KEY (`marca_codMarca`) REFERENCES `marca` (`codMarca`)
 ) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb3;
 
--- Copiando dados para a tabela lanchonete2e2025.produto: ~2 rows (aproximadamente)
+-- Copiando dados para a tabela lanchonete2e2025.produto: ~3 rows (aproximadamente)
 INSERT INTO `produto` (`codProduto`, `nomeProduto`, `quantEstoque`, `quantMinima`, `precoCusto`, `precoVenda`, `margemLucro`, `validade`, `marca_codMarca`, `categoria_codCategoria`) VALUES
-	(4, 'Coxinha Frango', 20, 10, 5.00, 8.50, NULL, '2025-09-21', 2, 3),
-	(5, 'prestigio', 10, 5, 10.00, 20.00, NULL, '2025-09-14', 6, 2);
+	(2, 'Coxinha de Costela', 20, 10, 5.00, 11.20, 40.0, '2025-11-15', 3, 1),
+	(3, 'Prestígio', 7, 35, NULL, 5.60, 40.0, '2025-12-29', 7, 5),
+	(4, 'Coca-cola', 50, 20, NULL, 5.00, NULL, NULL, 5, 3),
+	(5, 'csdds', 2, 3, 10.00, 11.00, 3.0, '2025-08-26', 3, 1);
 
 -- Copiando estrutura para tabela lanchonete2e2025.venda
 DROP TABLE IF EXISTS `venda`;
@@ -560,12 +450,13 @@ CREATE TABLE IF NOT EXISTS `venda` (
   KEY `fk_venda_funcionario1_idx` (`funcionario_codFuncionario`),
   CONSTRAINT `fk_venda_cliente1` FOREIGN KEY (`cliente_codCliente`) REFERENCES `cliente` (`codCliente`),
   CONSTRAINT `fk_venda_funcionario1` FOREIGN KEY (`funcionario_codFuncionario`) REFERENCES `funcionario` (`codFuncionario`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb3;
 
--- Copiando dados para a tabela lanchonete2e2025.venda: ~0 rows (aproximadamente)
+-- Copiando dados para a tabela lanchonete2e2025.venda: ~3 rows (aproximadamente)
 INSERT INTO `venda` (`codVenda`, `dataHora`, `formaPagamento`, `cliente_codCliente`, `funcionario_codFuncionario`) VALUES
-	(1, '2025-09-19 07:21:32', 'PIX', 4, 1),
-	(2, '2025-09-19 07:22:42', 'Cartão de Débito', 3, 2);
+	(1, '2022-07-19 07:21:30', 'PIX', 3, 2),
+	(2, '2025-09-19 07:22:32', 'Dinheiro', 2, 2),
+	(3, '2025-09-23 16:03:03', 'Cartão de Débito', 3, 2);
 
 -- Copiando estrutura para view lanchonete2e2025.vi_cargos_altos_salarios
 DROP VIEW IF EXISTS `vi_cargos_altos_salarios`;
@@ -601,6 +492,28 @@ CREATE TABLE `vi_dadosclientes` (
 	`nomeCliente` VARCHAR(1) NOT NULL COLLATE 'utf8mb3_general_ci',
 	`nascimento` VARCHAR(1) NULL COLLATE 'utf8mb4_0900_ai_ci',
 	`cpf` VARCHAR(1) NULL COLLATE 'utf8mb3_general_ci'
+) ENGINE=MyISAM;
+
+-- Copiando estrutura para view lanchonete2e2025.vi_data09
+DROP VIEW IF EXISTS `vi_data09`;
+-- Criando tabela temporária para evitar erros de dependência de VIEW
+CREATE TABLE `vi_data09` (
+	`codVenda` INT NOT NULL,
+	`datahora` VARCHAR(1) NULL COLLATE 'utf8mb4_general_ci',
+	`formaPagamento` ENUM('PIX','Dinheiro','Cartão de Crédito','Cartão de Débito','Ticket Alimentação','Convênio','Cheque') NOT NULL COLLATE 'utf8mb3_general_ci',
+	`nomeFuncionario` VARCHAR(1) NOT NULL COLLATE 'utf8mb3_general_ci'
+) ENGINE=MyISAM;
+
+-- Copiando estrutura para view lanchonete2e2025.vi_date
+DROP VIEW IF EXISTS `vi_date`;
+-- Criando tabela temporária para evitar erros de dependência de VIEW
+CREATE TABLE `vi_date` (
+	`codVenda` INT NOT NULL,
+	`dataHora` VARCHAR(1) NULL COLLATE 'utf8mb4_0900_ai_ci',
+	`nomeCliente` VARCHAR(1) NOT NULL COLLATE 'utf8mb3_general_ci',
+	`dataNascimento` VARCHAR(1) NULL COLLATE 'utf8mb4_0900_ai_ci',
+	`idade` BIGINT NULL,
+	`nomeFuncionario` VARCHAR(1) NOT NULL COLLATE 'utf8mb3_general_ci'
 ) ENGINE=MyISAM;
 
 -- Copiando estrutura para view lanchonete2e2025.vi_idadeclientes
@@ -647,6 +560,14 @@ CREATE TABLE `vi_ingredientes_estoque_baixo` (
 	`estoqueIngrediente` FLOAT NULL
 ) ENGINE=MyISAM;
 
+-- Copiando estrutura para view lanchonete2e2025.vi_mediaprecovendacategoria
+DROP VIEW IF EXISTS `vi_mediaprecovendacategoria`;
+-- Criando tabela temporária para evitar erros de dependência de VIEW
+CREATE TABLE `vi_mediaprecovendacategoria` (
+	`nomeCategoria` VARCHAR(1) NOT NULL COLLATE 'utf8mb3_general_ci',
+	`mediaPrecoVendaCategoria` DECIMAL(10,6) NULL
+) ENGINE=MyISAM;
+
 -- Copiando estrutura para view lanchonete2e2025.vi_nascimentofuncionarios
 DROP VIEW IF EXISTS `vi_nascimentofuncionarios`;
 -- Criando tabela temporária para evitar erros de dependência de VIEW
@@ -656,6 +577,17 @@ CREATE TABLE `vi_nascimentofuncionarios` (
 	`nascimento` VARCHAR(1) NULL COLLATE 'utf8mb4_0900_ai_ci'
 ) ENGINE=MyISAM;
 
+-- Copiando estrutura para view lanchonete2e2025.vi_notinha_detalhada
+DROP VIEW IF EXISTS `vi_notinha_detalhada`;
+-- Criando tabela temporária para evitar erros de dependência de VIEW
+CREATE TABLE `vi_notinha_detalhada` (
+	`venda_codVenda` INT NOT NULL,
+	`nomeProduto` VARCHAR(1) NOT NULL COLLATE 'utf8mb3_general_ci',
+	`quantVenda` FLOAT NOT NULL,
+	`precoVenda` DECIMAL(6,2) NOT NULL,
+	`totalporitem` VARCHAR(1) NULL COLLATE 'utf8mb4_0900_ai_ci'
+) ENGINE=MyISAM;
+
 -- Copiando estrutura para view lanchonete2e2025.vi_totalclientes
 DROP VIEW IF EXISTS `vi_totalclientes`;
 -- Criando tabela temporária para evitar erros de dependência de VIEW
@@ -663,12 +595,21 @@ CREATE TABLE `vi_totalclientes` (
 	`Total de Clientes` BIGINT NOT NULL
 ) ENGINE=MyISAM;
 
+-- Copiando estrutura para view lanchonete2e2025.vi_totalclientesporcidade
+DROP VIEW IF EXISTS `vi_totalclientesporcidade`;
+-- Criando tabela temporária para evitar erros de dependência de VIEW
+CREATE TABLE `vi_totalclientesporcidade` (
+	`cidade` VARCHAR(1) NULL COLLATE 'utf8mb3_general_ci',
+	`totalClientePorCidade` BIGINT NOT NULL
+) ENGINE=MyISAM;
+
 -- Copiando estrutura para view lanchonete2e2025.vi_total_a_pagar
 DROP VIEW IF EXISTS `vi_total_a_pagar`;
 -- Criando tabela temporária para evitar erros de dependência de VIEW
 CREATE TABLE `vi_total_a_pagar` (
 	`venda_codVenda` INT NOT NULL,
-	`Valor Final` VARCHAR(1) NULL COLLATE 'utf8mb4_general_ci'
+	`nomeCliente` VARCHAR(1) NOT NULL COLLATE 'utf8mb3_general_ci',
+	`total_a_pagar` VARCHAR(1) NULL COLLATE 'utf8mb4_0900_ai_ci'
 ) ENGINE=MyISAM;
 
 -- Removendo tabela temporária e criando a estrutura VIEW final
@@ -689,6 +630,16 @@ CREATE ALGORITHM=UNDEFINED SQL SECURITY DEFINER VIEW `vi_clientesexternos` AS se
 -- Removendo tabela temporária e criando a estrutura VIEW final
 DROP TABLE IF EXISTS `vi_dadosclientes`;
 CREATE ALGORITHM=UNDEFINED SQL SECURITY DEFINER VIEW `vi_dadosclientes` AS select `c`.`nomeCliente` AS `nomeCliente`,date_format(`c`.`dataNascimento`,'%d/%m/%Y') AS `nascimento`,`c`.`cpf` AS `cpf` from `cliente` `c` where ((`c`.`dataNascimento` is not null) or (`c`.`cpf` is not null))
+;
+
+-- Removendo tabela temporária e criando a estrutura VIEW final
+DROP TABLE IF EXISTS `vi_data09`;
+CREATE ALGORITHM=UNDEFINED SQL SECURITY DEFINER VIEW `vi_data09` AS select `v`.`codVenda` AS `codVenda`,date_format(`v`.`dataHora`,'%d/%m/%Y -- %H:%i:%s') AS `datahora`,`v`.`formaPagamento` AS `formaPagamento`,`f`.`nomeFuncionario` AS `nomeFuncionario` from (`venda` `v` join `funcionario` `f` on((`v`.`funcionario_codFuncionario` = `f`.`codFuncionario`))) where (`v`.`dataHora` like '2025-09%')
+;
+
+-- Removendo tabela temporária e criando a estrutura VIEW final
+DROP TABLE IF EXISTS `vi_date`;
+CREATE ALGORITHM=UNDEFINED SQL SECURITY DEFINER VIEW `vi_date` AS select `v`.`codVenda` AS `codVenda`,date_format(`v`.`dataHora`,'%d/%m%/%Y %H:%i:%s') AS `dataHora`,`c`.`nomeCliente` AS `nomeCliente`,date_format(`c`.`dataNascimento`,'%d/%m%/%Y') AS `dataNascimento`,floor(((to_days(curdate()) - to_days(`c`.`dataNascimento`)) / 365)) AS `idade`,`f`.`nomeFuncionario` AS `nomeFuncionario` from ((`venda` `v` join `cliente` `c` on((`v`.`cliente_codCliente` = `c`.`codCliente`))) join `funcionario` `f` on((`v`.`funcionario_codFuncionario` = `f`.`codFuncionario`)))
 ;
 
 -- Removendo tabela temporária e criando a estrutura VIEW final
@@ -717,8 +668,18 @@ CREATE ALGORITHM=UNDEFINED SQL SECURITY DEFINER VIEW `vi_ingredientes_estoque_ba
 ;
 
 -- Removendo tabela temporária e criando a estrutura VIEW final
+DROP TABLE IF EXISTS `vi_mediaprecovendacategoria`;
+CREATE ALGORITHM=UNDEFINED SQL SECURITY DEFINER VIEW `vi_mediaprecovendacategoria` AS select `c`.`nomeCategoria` AS `nomeCategoria`,avg(`p`.`precoVenda`) AS `mediaPrecoVendaCategoria` from (`produto` `p` join `categoria` `c` on((`p`.`categoria_codCategoria` = `c`.`codCategoria`))) group by `c`.`nomeCategoria`
+;
+
+-- Removendo tabela temporária e criando a estrutura VIEW final
 DROP TABLE IF EXISTS `vi_nascimentofuncionarios`;
 CREATE ALGORITHM=UNDEFINED SQL SECURITY DEFINER VIEW `vi_nascimentofuncionarios` AS select `f`.`nomeFuncionario` AS `nomeFuncionario`,`f`.`cpf` AS `cpf`,date_format(`f`.`dataNascimento`,'%d/%m/%Y') AS `nascimento` from `funcionario` `f`
+;
+
+-- Removendo tabela temporária e criando a estrutura VIEW final
+DROP TABLE IF EXISTS `vi_notinha_detalhada`;
+CREATE ALGORITHM=UNDEFINED SQL SECURITY DEFINER VIEW `vi_notinha_detalhada` AS select `i`.`venda_codVenda` AS `venda_codVenda`,`p`.`nomeProduto` AS `nomeProduto`,`i`.`quantVenda` AS `quantVenda`,`p`.`precoVenda` AS `precoVenda`,format((`i`.`quantVenda` * `p`.`precoVenda`),2) AS `totalporitem` from (`itensvenda` `i` join `produto` `p` on((`i`.`produto_codProduto` = `p`.`codProduto`)))
 ;
 
 -- Removendo tabela temporária e criando a estrutura VIEW final
@@ -727,8 +688,13 @@ CREATE ALGORITHM=UNDEFINED SQL SECURITY DEFINER VIEW `vi_totalclientes` AS selec
 ;
 
 -- Removendo tabela temporária e criando a estrutura VIEW final
+DROP TABLE IF EXISTS `vi_totalclientesporcidade`;
+CREATE ALGORITHM=UNDEFINED SQL SECURITY DEFINER VIEW `vi_totalclientesporcidade` AS select `cliente`.`cidade` AS `cidade`,count(0) AS `totalClientePorCidade` from `cliente` group by `cliente`.`cidade`
+;
+
+-- Removendo tabela temporária e criando a estrutura VIEW final
 DROP TABLE IF EXISTS `vi_total_a_pagar`;
-CREATE ALGORITHM=UNDEFINED SQL SECURITY DEFINER VIEW `vi_total_a_pagar` AS select `i`.`venda_codVenda` AS `venda_codVenda`,format(sum((`i`.`quantVenda` * `p`.`precoVenda`)),2) AS `Valor Final` from (((`venda` `v` join `itensvenda` `i` on((`v`.`codVenda` = `i`.`venda_codVenda`))) join `produto` `p` on((`p`.`codProduto` = `i`.`produto_codProduto`))) join `cliente` `c` on((`c`.`codCliente` = `v`.`cliente_codCliente`))) group by `i`.`venda_codVenda`,`c`.`nomeCliente`
+CREATE ALGORITHM=UNDEFINED SQL SECURITY DEFINER VIEW `vi_total_a_pagar` AS select `i`.`venda_codVenda` AS `venda_codVenda`,`c`.`nomeCliente` AS `nomeCliente`,format(sum((`i`.`quantVenda` * `p`.`precoVenda`)),2) AS `total_a_pagar` from (((`venda` `v` join `itensvenda` `i` on((`v`.`codVenda` = `i`.`venda_codVenda`))) join `produto` `p` on((`p`.`codProduto` = `i`.`produto_codProduto`))) join `cliente` `c` on((`c`.`codCliente` = `v`.`cliente_codCliente`))) group by `i`.`venda_codVenda`,`c`.`nomeCliente`
 ;
 
 /*!40103 SET TIME_ZONE=IFNULL(@OLD_TIME_ZONE, 'system') */;
